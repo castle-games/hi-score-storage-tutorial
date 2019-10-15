@@ -1,0 +1,5 @@
+main: main.lua
+title: High Score Storage Tutorial
+description: Use `castle.storage` to save and load a high score.
+dimensions: 400x300
+owner: ben
