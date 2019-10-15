@@ -12,12 +12,21 @@ local Box = {
 
 local HIGH_SCORE_STORAGE_KEY = 'highscore'
 
+function love.load()
+   loadHighScore()
+end
+
 function love.draw()
    love.graphics.setColor(1, 1, 0, 1)
    love.graphics.rectangle('fill', Box.x, Box.y, Box.width, Box.height)
 
    love.graphics.setColor(1, 1, 1, 1)
    love.graphics.print('you clicked the box ' .. State.score .. ' times', 50, 175)
+
+   if State.highScore > 0 then
+      love.graphics.setColor(1, 0, 1, 1)
+      love.graphics.print('your best score: ' .. State.highScore .. ' clicks', 50, 195)
+   end
 end
 
 function love.mousepressed(x, y)
@@ -40,5 +49,14 @@ function saveHighScore(score)
    State.highScore = score
    network.async(function()
          castle.storage.set(HIGH_SCORE_STORAGE_KEY, score)
+   end)
+end
+
+function loadHighScore()
+   network.async(function()
+         local highScore = castle.storage.get(HIGH_SCORE_STORAGE_KEY)
+         if not (highScore == nil) then
+            State.highScore = highScore
+         end
    end)
 end
